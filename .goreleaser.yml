@@ -1,5 +1,5 @@
 builds:
-  - binary: md4pt
+  - binary: genidx
     goos:
       - windows
       - darwin
@@ -16,3 +16,4 @@ archive:
   name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
   files:
     - README.md
+    - template.html
