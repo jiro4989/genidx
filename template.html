@@ -163,7 +163,7 @@ img {
         <nav id="{{$title}}">
           {{- range $ch, $_ := .}}
           <div class="ch-area">
-            <h2>第{{$ch}}話</h2>
+            <h2>{{$ch}}</h2>
             {{- range .}}
             <span class="no-link">
               <a class="no-link" href="{{.}}" onclick="javascript:void(0); return false;" onfocus="changeImage('imgArea', '{{.}}'); this.parentNode.parentNode.scrollIntoView(true);">
