@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>ファイル一覧</title>
+    <script>
+
+      window.onload = function() {
+        
+        document.getElementsByTagName("a")[0].focus();
+
+        
+        var selectedRadioIndex = getSelectedRadioIndex("menuImageRadio");
+        var targetRadio = document.getElementsByName("menuImageRadio")[selectedRadioIndex];
+        var img = targetRadio.parentNode.getElementsByTagName("img")[0];
+        changeImage(img.src);
+      }
+
+window.addEventListener("keydown", function(e) {
+  if (e != null) {
+    var code = e.keyCode;
+    switch (code) {
+
+        case 65:
+        document.getElementsByClassName("tab-link")[0].focus();
+        break;
+
+        case 74: 
+        selectNextImage();
+        break;
+
+        case 75: 
+        selectNextImage();
+        break;
+
+        case 72: 
+        selectPrevImage();
+        break;
+
+        case 76: 
+        selectNextImage();
+        break;
+    }
+  }
+})
+
+function changeImage(url) {
+  var img = document.getElementById("imgArea");
+  img.src = url;
+}
+
+var bufSelectedRadioIndex = null;
+
+
+
+function getSelectedRadioIndex(name) {
+  if (bufSelectedRadioIndex == null) {
+    var radios = document.getElementsByName(name);
+    for (var i=0; i<radios.length; i++) {
+      var radio = radios[i];
+      if (radio.checked) {
+        bufSelectedRadioIndex = i;
+        return i;
+      }
+    }
+    return 0;
+  } else {
+    return bufSelectedRadioIndex;
+  }
+}
+
+function changeClickedImage(elem, imgSrc) {
+  elem.parentNode.getElementsByTagName('input')[0].checked = true;
+  var radios = document.getElementsByName("menuImageRadio");
+  for (var i=0; i<radios.length; i++) {
+    var radio = radios[i];
+    if (radio.checked) {
+      bufSelectedRadioIndex = i;
+      break;
+    }
+  }
+  getSelectedRadioIndex('menuImageRadio');
+  changeImage(imgSrc);
+  elem.parentNode.parentNode.scrollIntoView(true);
+}
+
+function selectPrevImage() {
+  var radioName = "menuImageRadio";
+  var selectedRadioIndex = getSelectedRadioIndex(radioName);
+
+  var prevIndex = selectedRadioIndex - 1;
+  if (prevIndex < 0) {
+    prevIndex = document.getElementsByName(radioName).length - 1;
+  }
+  bufSelectedRadioIndex = prevIndex;
+  var targetRadio = document.getElementsByName(radioName)[prevIndex];
+  targetRadio.checked = true;
+
+  var img = targetRadio.parentNode.getElementsByTagName("img")[0];
+  changeImage(img.src);
+
+  targetRadio.parentNode.parentNode.scrollIntoView(true);
+}
+
+function selectNextImage() {
+  var radioName = "menuImageRadio";
+  var selectedRadioIndex = getSelectedRadioIndex(radioName);
+
+  var max = document.getElementsByName(radioName).length - 1;
+  var nextIndex = selectedRadioIndex + 1;
+  if (max < nextIndex) {
+    nextIndex = 0;
+  }
+  bufSelectedRadioIndex = nextIndex;
+  var targetRadio = document.getElementsByName(radioName)[nextIndex];
+  targetRadio.checked = true;
+
+  var img = targetRadio.parentNode.getElementsByTagName("img")[0];
+  changeImage(img.src);
+
+  targetRadio.parentNode.parentNode.scrollIntoView(true);
+}
+
+    </script>
+
+    <style>
+
+ 
+body {
+  width: 100vw;
+  height: 85vh;
+  margin: auto;
+  margin-top: 5px;
+}
+
+.main-content {
+  width: 100%;
+  height: 100%;
+}
+
+.tab-menu {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.tab-menu a { width: 15vw; }
+
+.tab-link {
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: 6px solid #000;
+  border-radius: 6px 0 0 6px;
+  display: inline-block;
+  line-height: 24px;
+  text-align: center;
+  background-color: #efefef;
+  margin-left 4px;
+  text-decoration: none;
+  padding 0 32px;
+  margin-bottom: 3px;
+}
+
+.tab-link:focus, .tab-link:hover, .change-page-link:hover {
+  background-color: lightblue;
+}
+
+.menu-area {
+  display: inline-block;
+  overflow: auto;
+  width: 20vw;
+  height: 95vh;
+  border: 1px #000000 solid;
+  padding-left: 10px;
+  background-color: #efefef;
+  vertical-align: top;
+}
+
+ul { list-style: none; }
+nav { display:none; }
+nav:target { display:inline-block; }
+
+.selected-state {
+  display: none;
+}
+
+.img-view-area {
+  height: 95vh;
+  border: 1px #000000 solid;
+  display: inline-block;
+  width: 55vw;
+  vertical-align: top;
+}
+
+span .selected-state:checked + img {
+  filter: brightness(0.4);
+  transform: scale(1.5);
+  z-index: 1;
+}
+
+ 
+.ch-area {
+  border-bottom: 1px solid black;
+}
+
+ 
+figure {
+  display: inline-block;
+  text-align: center;
+}
+
+.index-img-area img {
+  transform: scale(1.0);
+  transition: all 300ms 0s ease;
+  z-index: auto;
+}
+
+.no-link {
+  cursor: default;
+  text-decoration: none;
+}
+
+.index-img-area:hover img, .index-img-area:focus img {
+  filter: brightness(0.4);
+  transform: scale(1.5);
+  z-index: 1;
+}
+
+img {
+  box-shadow: 0px 5px 15px -5px rgba(0, 0, 0, 0.8);
+}
+
+#imgArea {
+  margin-top: 5px;
+  display: inline-block;
+  max-height: 800px;
+  transform: scale(1);
+}
+
+.change-page-link {
+  font-size: 25px;
+  text-align: center;
+  width: 45%;
+  line-height: 24px;
+  display: inline-block;
+  background-color: #efefef;
+  border: 1px solid #333;
+  text-decoration: none;
+}
+
+.index-img {
+  width:15%;
+  height: 15%;
+  padding: 3.5px;
+}
+
+    </style>
+
+  </head>
+  <body>
+    <div class="main-content">
+      <nav class="tab-menu">
+        <ul>
+          <li>
+            <a class="tab-link" href="#%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c">少女終末旅行</a>
+          </li>
+        </ul>
+      </nav><div class="menu-area">
+        <nav id="少女終末旅行">
+          <div class="ch-area">
+            <h2>001</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/001\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/001/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/001\/017.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>002</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/002\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/002/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/002\/017.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>008</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/017.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio17" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/018.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/018.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/018.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio18" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/019.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/019.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/019.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio19" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/008\/020.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/008/020.jpg" onclick="changeClickedImage(this, '少女終末旅行\/008\/020.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>009</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/009\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/009/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/009\/017.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>015</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/015\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/015/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/015\/017.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>016</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/016\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/016/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/016\/017.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>022</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/022\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/022/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/022\/016.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>023</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/023\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/023/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/023\/017.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>029</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/017.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio17" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/029\/018.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/029/018.jpg" onclick="changeClickedImage(this, '少女終末旅行\/029\/018.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>030</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/017.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio17" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/030\/018.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/030/018.jpg" onclick="changeClickedImage(this, '少女終末旅行\/030\/018.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>036</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/017.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio17" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/036\/018.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/036/018.jpg" onclick="changeClickedImage(this, '少女終末旅行\/036\/018.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>037</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/017.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio17" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/018.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/018.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/018.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio18" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/019.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/019.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/019.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio19" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/037\/020.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/037/020.jpg" onclick="changeClickedImage(this, '少女終末旅行\/037\/020.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>038</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/017.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio17" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/018.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/018.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/018.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio18" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/038\/019.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/038/019.jpg" onclick="changeClickedImage(this, '少女終末旅行\/038\/019.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>039</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/039\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/039/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/039\/017.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>040</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/006.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio6" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/007.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/007.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/007.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio7" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/008.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/008.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/008.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio8" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/009.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/009.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/009.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio9" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/010.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/010.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/010.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio10" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/011.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/011.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/011.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio11" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/012.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/012.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/012.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio12" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/013.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/013.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/013.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio13" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/014.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/014.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/014.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio14" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/015.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/015.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/015.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio15" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/016.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/016.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/016.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio16" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/017.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/017.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/017.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio17" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/040\/018.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/040/018.jpg" onclick="changeClickedImage(this, '少女終末旅行\/040\/018.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>other_01</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_01\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_01/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_01\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_01\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_01/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_01\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_01\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_01/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_01\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_01\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_01/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_01\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_01\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_01/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_01\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_01\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_01/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_01\/006.jpg');" />
+            </span>
+          </div>
+          <div class="ch-area">
+            <h2>other_02</h2>
+            <span class="index-img-area">
+              <input id="radio0" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_02\/001.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_02/001.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_02\/001.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio1" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_02\/002.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_02/002.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_02\/002.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio2" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_02\/003.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_02/003.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_02\/003.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio3" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_02\/004.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_02/004.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_02\/004.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio4" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_02\/005.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_02/005.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_02\/005.jpg');" />
+            </span>
+            <span class="index-img-area">
+              <input id="radio5" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('少女終末旅行\/other_02\/006.jpg'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="%e5%b0%91%e5%a5%b3%e7%b5%82%e6%9c%ab%e6%97%85%e8%a1%8c/other_02/006.jpg" onclick="changeClickedImage(this, '少女終末旅行\/other_02\/006.jpg');" />
+            </span>
+          </div>
+        </nav>
+      </div>
+
+      <div class="img-view-area">
+        <main>
+
+        
+        
+        
+
+        <div>
+          <a id="changePrevPageLink" class="change-page-link" href="" onclick="javascript:void(0); selectPrevImage(); return false;">前へ</a>
+          <a id="changeNextPageLink" class="change-page-link" href="" onclick="javascript:void(0); selectNextImage(); return false;">次へ</a>
+        </div>
+        <figure>
+          <img id="imgArea" src="" alt="" />
+        </figure>
+
+        
+        
+        
+
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

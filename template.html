@@ -8,22 +8,118 @@
       window.onload = function() {
         // 最初の目次要素にフォーカスする
         document.getElementsByTagName("a")[0].focus();
+
+        // 選択されているラジオボタンに紐づく画像を表示する。
+        var selectedRadioIndex = getSelectedRadioIndex("menuImageRadio");
+        var targetRadio = document.getElementsByName("menuImageRadio")[selectedRadioIndex];
+        var img = targetRadio.parentNode.getElementsByTagName("img")[0];
+        changeImage(img.src);
       }
 
 window.addEventListener("keydown", function(e) {
   if (e != null) {
     var code = e.keyCode;
     switch (code) {
+
         case 65:
         document.getElementsByClassName("tab-link")[0].focus();
+        break;
+
+        case 74: // J
+        selectNextImage();
+        break;
+
+        case 75: // K
+        selectNextImage();
+        break;
+
+        case 72: // H
+        selectPrevImage();
+        break;
+
+        case 76: // L
+        selectNextImage();
         break;
     }
   }
 })
 
-function changeImage(id, url) {
-  var img = document.getElementById(id)
+function changeImage(url) {
+  var img = document.getElementById("imgArea");
   img.src = url;
+}
+
+var bufSelectedRadioIndex = null;
+
+/*
+最初の一度だけループによって選択インデックスを返す
+*/
+function getSelectedRadioIndex(name) {
+  if (bufSelectedRadioIndex == null) {
+    var radios = document.getElementsByName(name);
+    for (var i=0; i<radios.length; i++) {
+      var radio = radios[i];
+      if (radio.checked) {
+        bufSelectedRadioIndex = i;
+        return i;
+      }
+    }
+    return 0;
+  } else {
+    return bufSelectedRadioIndex;
+  }
+}
+
+function changeClickedImage(elem, imgSrc) {
+  elem.parentNode.getElementsByTagName('input')[0].checked = true;
+  var radios = document.getElementsByName("menuImageRadio");
+  for (var i=0; i<radios.length; i++) {
+    var radio = radios[i];
+    if (radio.checked) {
+      bufSelectedRadioIndex = i;
+      break;
+    }
+  }
+  getSelectedRadioIndex('menuImageRadio');
+  changeImage(imgSrc);
+  elem.parentNode.parentNode.scrollIntoView(true);
+}
+
+function selectPrevImage() {
+  var radioName = "menuImageRadio";
+  var selectedRadioIndex = getSelectedRadioIndex(radioName);
+
+  var prevIndex = selectedRadioIndex - 1;
+  if (prevIndex < 0) {
+    prevIndex = document.getElementsByName(radioName).length - 1;
+  }
+  bufSelectedRadioIndex = prevIndex;
+  var targetRadio = document.getElementsByName(radioName)[prevIndex];
+  targetRadio.checked = true;
+
+  var img = targetRadio.parentNode.getElementsByTagName("img")[0];
+  changeImage(img.src);
+
+  targetRadio.parentNode.parentNode.scrollIntoView(true);
+}
+
+function selectNextImage() {
+  var radioName = "menuImageRadio";
+  var selectedRadioIndex = getSelectedRadioIndex(radioName);
+
+  var max = document.getElementsByName(radioName).length - 1;
+  var nextIndex = selectedRadioIndex + 1;
+  if (max < nextIndex) {
+    nextIndex = 0;
+  }
+  bufSelectedRadioIndex = nextIndex;
+  var targetRadio = document.getElementsByName(radioName)[nextIndex];
+  targetRadio.checked = true;
+
+  var img = targetRadio.parentNode.getElementsByTagName("img")[0];
+  changeImage(img.src);
+
+  targetRadio.parentNode.parentNode.scrollIntoView(true);
 }
 
     </script>
@@ -69,7 +165,7 @@ body {
   margin-bottom: 3px;
 }
 
-.tab-link:focus, .tab-link:hover {
+.tab-link:focus, .tab-link:hover, .change-page-link:hover {
   background-color: lightblue;
 }
 
@@ -88,12 +184,22 @@ ul { list-style: none; }
 nav { display:none; }
 nav:target { display:inline-block; }
 
+.selected-state {
+  display: none;
+}
+
 .img-view-area {
   height: 95vh;
   border: 1px #000000 solid;
   display: inline-block;
   width: 55vw;
   vertical-align: top;
+}
+
+span .selected-state:checked + img {
+  filter: brightness(0.4);
+  transform: scale(1.5);
+  z-index: 1;
 }
 
 /* 
@@ -115,7 +221,7 @@ figure {
   text-align: center;
 }
 
-a img, a img {
+.index-img-area img {
   transform: scale(1.0);
   transition: all 300ms 0s ease;
   z-index: auto;
@@ -126,7 +232,7 @@ a img, a img {
   text-decoration: none;
 }
 
-a:hover img, a:focus img {
+.index-img-area:hover img, .index-img-area:focus img {
   filter: brightness(0.4);
   transform: scale(1.5);
   z-index: 1;
@@ -141,6 +247,17 @@ img {
   display: inline-block;
   max-height: 800px;
   transform: scale({{.Scale}});
+}
+
+.change-page-link {
+  font-size: 25px;
+  text-align: center;
+  width: 45%;
+  line-height: 24px;
+  display: inline-block;
+  background-color: #efefef;
+  border: 1px solid #333;
+  text-decoration: none;
 }
 
 .index-img {
@@ -168,11 +285,10 @@ img {
           {{- range $ch, $_ := .}}
           <div class="ch-area">
             <h2>{{$ch}}</h2>
-            {{- range .}}
-            <span class="no-link">
-              <a class="no-link" href="{{.}}" onclick="javascript:void(0); return false;" onfocus="changeImage('imgArea', '{{.}}'); this.parentNode.parentNode.scrollIntoView(true);">
-                <img class="index-img no-link" src="{{.}}" />
-              </a>
+            {{- range $idx, $item := .}}
+            <span class="index-img-area">
+              <input id="radio{{$idx}}" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('{{$item}}'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <img class="index-img no-link" src="{{$item}}" onclick="changeClickedImage(this, '{{$item}}');" />
             </span>
             {{- end}}
           </div>
@@ -188,6 +304,10 @@ img {
         <!-- edit here -->
         <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 
+        <div>
+          <a id="changePrevPageLink" class="change-page-link" href="" onclick="javascript:void(0); selectPrevImage(); return false;">前へ</a>
+          <a id="changeNextPageLink" class="change-page-link" href="" onclick="javascript:void(0); selectNextImage(); return false;">次へ</a>
+        </div>
         <figure>
           <img id="imgArea" src="" alt="" />
         </figure>
