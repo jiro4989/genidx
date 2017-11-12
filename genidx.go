@@ -74,24 +74,15 @@ func main() {
 
 // 再帰的に画像フォルダのパスを返す
 func getAllPaths(p string) []string {
-	var prevPath string
 	paths := make([]string, 0)
 	filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
 		lower := strings.ToLower(path)
 		if strings.HasSuffix(lower, ".png") || strings.HasSuffix(lower, ".jpg") {
-			// 漫画の変わり目に改行を区切り線を入れる
-			prevCh, _ := filepath.Split(prevPath)
-			currentCh, _ := filepath.Split(path)
-			if prevCh != currentCh {
-				//paths = append(paths, "CHANGED")
-			}
-
-			prevPath = path
 			paths = append(paths, path)
 		}
 		return nil
 	})
-	return paths[1:]
+	return paths
 }
 
 func convertComicData(paths []string) map[string]map[string][]string {
