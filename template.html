@@ -14,6 +14,17 @@
         var targetRadio = document.getElementsByName("menuImageRadio")[selectedRadioIndex];
         var img = targetRadio.parentNode.getElementsByTagName("img")[0];
         changeImage(img.src);
+
+        // 開かれている漫画の属するタブを選択する
+        var navId = targetRadio.parentNode.parentNode.parentNode.id;
+        var tabLinks = document.getElementsByClassName("tab-link");
+        for (var i=0; i<tabLinks.length; i++) {
+          var tab = tabLinks[i];
+          if (tab.innerHTML == navId) {
+            tab.click();
+            break;
+          }
+        }
       }
 
 window.addEventListener("keydown", function(e) {
