@@ -181,8 +181,8 @@ body {
 }
 
 ul { list-style: none; }
-nav { display:none; }
-nav:target { display:inline-block; }
+nav { display: none; }
+nav:target { display: inline-block; }
 
 .selected-state {
   display: none;
@@ -275,7 +275,7 @@ img {
         <ul>
           {{- range $title, $_ := .Comics}}
           <li>
-            <a class="tab-link" href="#{{$title}}">{{$title}}</a>
+            <a class="tab-link" href="#{{$title}}" onclick="var e = document.getElementById('{{$title}}').getElementsByTagName('span')[0].getElementsByClassName('index-img')[0]; changeClickedImage(e, e.src);">{{$title}}</a>
           </li>
           {{- end}}
         </ul>
@@ -287,7 +287,7 @@ img {
             <h2>{{$ch}}</h2>
             {{- range $idx, $item := .}}
             <span class="index-img-area">
-              <input id="radio{{$idx}}" class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('{{$item}}'); this.parentNode.parentNode.scrollIntoView(true);" />
+              <input class="selected-state" type="radio" name="menuImageRadio" onchange="changeImage('{{$item}}'); this.parentNode.parentNode.scrollIntoView(true);" />
               <img class="index-img no-link" src="{{$item}}" onclick="changeClickedImage(this, '{{$item}}');" />
             </span>
             {{- end}}
